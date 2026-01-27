@@ -57,6 +57,17 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        admin: {
+          sidebar: "hsl(var(--admin-sidebar))",
+          "sidebar-active": "hsl(var(--admin-sidebar-active))",
+          "sidebar-text": "hsl(var(--admin-sidebar-text))",
+          "sidebar-text-active": "hsl(var(--admin-sidebar-text-active))",
+          header: "hsl(var(--admin-header))",
+          content: "hsl(var(--admin-content))",
+          folder: "hsl(var(--admin-folder))",
+          "tab-bg": "hsl(var(--admin-tab-bg))",
+          "tab-active": "hsl(var(--admin-tab-active))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,20 +76,12 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
