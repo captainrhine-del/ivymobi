@@ -30,21 +30,20 @@ export default function InformationManagement() {
 
   const handleAddArticle = (data: { name: string; thumbnail: File | null; content: string }) => {
     console.log("Article added:", data);
-    // Here you would typically save the article to your backend
   };
 
   return (
     <AdminLayout>
       <div className="flex h-full">
         {/* Left Tab Panel */}
-        <div className="w-44 bg-admin-tab-bg border-r border-border shrink-0">
+        <div className="w-40 bg-card border-r border-border shrink-0">
           <button
             onClick={() => setActiveTab("articles")}
             className={cn(
-              "w-full py-4 px-6 text-left font-medium transition-colors",
+              "w-full py-4 px-6 text-left text-sm font-medium transition-colors border-l-2",
               activeTab === "articles"
-                ? "bg-admin-tab-active text-foreground"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-accent text-accent-foreground border-primary"
+                : "text-muted-foreground hover:text-foreground border-transparent hover:bg-muted"
             )}
           >
             文章
@@ -52,10 +51,10 @@ export default function InformationManagement() {
           <button
             onClick={() => setActiveTab("qa")}
             className={cn(
-              "w-full py-4 px-6 text-left font-medium transition-colors",
+              "w-full py-4 px-6 text-left text-sm font-medium transition-colors border-l-2",
               activeTab === "qa"
-                ? "bg-admin-tab-active text-foreground"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-accent text-accent-foreground border-primary"
+                : "text-muted-foreground hover:text-foreground border-transparent hover:bg-muted"
             )}
           >
             问答
@@ -66,13 +65,12 @@ export default function InformationManagement() {
         <div className="flex-1 p-6">
           {activeTab === "articles" && (
             <div className="space-y-4">
-              {/* Breadcrumb & Actions */}
-              <div className="flex items-center justify-between">
-                <div className="text-muted-foreground">首页</div>
-              </div>
+              {/* Breadcrumb */}
+              <div className="text-sm text-muted-foreground">首页</div>
 
+              {/* Header */}
               <div className="flex items-center justify-between">
-                <h2 className="text-lg text-foreground">文章管理</h2>
+                <h2 className="text-lg font-medium text-foreground">文章管理</h2>
                 <div className="flex gap-3">
                   <Button onClick={() => setShowAddCategory(true)}>
                     添加分类
@@ -93,9 +91,9 @@ export default function InformationManagement() {
 
           {activeTab === "qa" && (
             <div className="space-y-4">
-              <div className="text-muted-foreground">首页</div>
-              <h2 className="text-lg text-foreground">问答管理</h2>
-              <div className="bg-card rounded-lg p-8 text-center text-muted-foreground">
+              <div className="text-sm text-muted-foreground">首页</div>
+              <h2 className="text-lg font-medium text-foreground">问答管理</h2>
+              <div className="bg-card rounded-xl border border-border p-8 text-center text-muted-foreground">
                 暂无问答内容
               </div>
             </div>

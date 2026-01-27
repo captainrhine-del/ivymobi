@@ -58,21 +58,20 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
         admin: {
-          sidebar: "hsl(var(--admin-sidebar))",
-          "sidebar-active": "hsl(var(--admin-sidebar-active))",
-          "sidebar-text": "hsl(var(--admin-sidebar-text))",
-          "sidebar-text-active": "hsl(var(--admin-sidebar-text-active))",
-          header: "hsl(var(--admin-header))",
-          content: "hsl(var(--admin-content))",
-          folder: "hsl(var(--admin-folder))",
-          "tab-bg": "hsl(var(--admin-tab-bg))",
-          "tab-active": "hsl(var(--admin-tab-active))",
+          "icon-bg": "hsl(var(--admin-icon-bg))",
+          "icon-color": "hsl(var(--admin-icon-color))",
+          "chart-bar": "hsl(var(--admin-chart-bar))",
         },
+        folder: "hsl(var(--folder))",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        card: "0 1px 3px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.04)",
+        "card-hover": "0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)",
       },
       keyframes: {
         "accordion-down": {
