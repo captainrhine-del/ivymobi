@@ -1,5 +1,18 @@
-import { GripVertical, Folder, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { DraggableCategoryRow } from "./DraggableCategoryRow";
 
 interface Category {
   id: string;
@@ -9,29 +22,53 @@ interface Category {
 interface CategoryListProps {
   categories: Category[];
   onCategoryClick?: (category: Category) => void;
+  onReorder?: (categories: Category[]) => void;
 }
 
-export function CategoryList({ categories, onCategoryClick }: CategoryListProps) {
+export function CategoryList({ categories, onCategoryClick, onReorder }: CategoryListProps) {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = categories.findIndex((cat) => cat.id === active.id);
+      const newIndex = categories.findIndex((cat) => cat.id === over.id);
+      
+      const newCategories = [...categories];
+      const [removed] = newCategories.splice(oldIndex, 1);
+      newCategories.splice(newIndex, 0, removed);
+      
+      onReorder?.(newCategories);
+    }
+  };
+
   return (
     <div className="bg-card rounded-xl border border-border overflow-hidden">
-      {categories.map((category, index) => (
-        <div
-          key={category.id}
-          onClick={() => onCategoryClick?.(category)}
-          className={cn(
-            "flex items-center px-4 py-4 cursor-pointer hover:bg-muted/50 transition-colors",
-            index !== categories.length - 1 && "border-b border-border"
-          )}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={categories.map((c) => c.id)}
+          strategy={verticalListSortingStrategy}
         >
-          <GripVertical className="h-5 w-5 text-muted-foreground/50 mr-3 cursor-grab" />
-          <div className="w-10 h-8 bg-folder rounded flex items-center justify-center mr-3">
-            <Folder className="h-4 w-4 text-primary-foreground fill-primary-foreground" />
-          </div>
-          <span className="flex-1 text-foreground">{category.name}</span>
-          <span className="text-muted-foreground text-sm mr-2">分类</span>
-          <ChevronRight className="h-5 w-5 text-muted-foreground" />
-        </div>
-      ))}
+          {categories.map((category, index) => (
+            <DraggableCategoryRow
+              key={category.id}
+              category={category}
+              isLast={index === categories.length - 1}
+              onClick={onCategoryClick}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }

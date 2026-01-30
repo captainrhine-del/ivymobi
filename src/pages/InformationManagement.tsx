@@ -85,6 +85,7 @@ export default function InformationManagement() {
               <CategoryList
                 categories={categories}
                 onCategoryClick={(category) => console.log("Clicked:", category)}
+                onReorder={(newCategories) => setCategories(newCategories)}
               />
             </div>
           )}
