@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MemberDetailPanel } from "@/components/members/MemberDetailPanel";
 
 interface Group {
   id: string;
@@ -25,6 +26,12 @@ interface Member {
   phone: string;
   email: string;
   groupId: string;
+  avatar?: string;
+  department?: string;
+  position?: string;
+  status?: string;
+  groups?: string[];
+  receiveNotifications?: boolean;
 }
 
 // Mock data
@@ -40,21 +47,143 @@ const mockGroups: Group[] = [
 ];
 
 const mockMembers: Member[] = [
-  { id: "1", name: "杨恒", phone: "18500365676", email: "yangh@ivymobi.com", groupId: "3" },
-  { id: "2", name: "柳婷", phone: "13521424377", email: "liut@ivymobi.com", groupId: "3" },
-  { id: "3", name: "CharlesDing", phone: "18600812345", email: "dingchen@ivymobi.com", groupId: "3" },
-  { id: "4", name: "张昱", phone: "17602256151", email: "zhangy@ivymobi.com", groupId: "3" },
-  { id: "5", name: "许洪涛", phone: "18611742312", email: "xuht@ivymobi.com", groupId: "3" },
-  { id: "6", name: "liyang", phone: "13141055806", email: "87384094@sina.com", groupId: "6" },
-  { id: "7", name: "杨经理", phone: "18510994288", email: "yangxy@ivymobi.com", groupId: "7" },
-  { id: "8", name: "张毅华", phone: "13701330580", email: "zhangyh@ivymobi.com", groupId: "3" },
-  { id: "9", name: "马年林", phone: "18600260781", email: "manl@ivymobi.com", groupId: "3" },
-  { id: "10", name: "田钢", phone: "15810505520", email: "tg@ivymobi.com", groupId: "3" },
-  { id: "11", name: "刘承亮", phone: "18363623719", email: "383237767@qq.com", groupId: "3" },
+  { 
+    id: "1", 
+    name: "杨恒", 
+    phone: "18500365676", 
+    email: "yangh@ivymobi.com", 
+    groupId: "3",
+    department: "技术部",
+    position: "技术总监",
+    status: "已激活",
+    groups: ["已激活", "管理员"],
+    receiveNotifications: true
+  },
+  { 
+    id: "2", 
+    name: "柳婷", 
+    phone: "13521424377", 
+    email: "liut@ivymobi.com", 
+    groupId: "3",
+    department: "市场部",
+    position: "市场经理",
+    status: "已激活",
+    groups: ["已激活"],
+    receiveNotifications: true
+  },
+  { 
+    id: "3", 
+    name: "CharlesDing", 
+    phone: "18600812345", 
+    email: "dingchen@ivymobi.com", 
+    groupId: "3",
+    department: "",
+    position: "董事长CEO",
+    status: "已激活",
+    groups: ["已激活", "管理员"],
+    receiveNotifications: false
+  },
+  { 
+    id: "4", 
+    name: "张昱", 
+    phone: "17602256151", 
+    email: "zhangy@ivymobi.com", 
+    groupId: "3",
+    department: "研发部",
+    position: "高级工程师",
+    status: "已激活",
+    groups: ["已激活"],
+    receiveNotifications: true
+  },
+  { 
+    id: "5", 
+    name: "许洪涛", 
+    phone: "18611742312", 
+    email: "xuht@ivymobi.com", 
+    groupId: "3",
+    department: "销售部",
+    position: "销售总监",
+    status: "已激活",
+    groups: ["已激活", "销售部"],
+    receiveNotifications: true
+  },
+  { 
+    id: "6", 
+    name: "liyang", 
+    phone: "13141055806", 
+    email: "87384094@sina.com", 
+    groupId: "6",
+    department: "运营部",
+    position: "运营经理",
+    status: "已激活",
+    groups: ["管理员"],
+    receiveNotifications: true
+  },
+  { 
+    id: "7", 
+    name: "杨经理", 
+    phone: "18510994288", 
+    email: "yangxy@ivymobi.com", 
+    groupId: "7",
+    department: "销售部",
+    position: "区域经理",
+    status: "已激活",
+    groups: ["销售部"],
+    receiveNotifications: true
+  },
+  { 
+    id: "8", 
+    name: "张毅华", 
+    phone: "13701330580", 
+    email: "zhangyh@ivymobi.com", 
+    groupId: "3",
+    department: "财务部",
+    position: "财务主管",
+    status: "已激活",
+    groups: ["已激活"],
+    receiveNotifications: false
+  },
+  { 
+    id: "9", 
+    name: "马年林", 
+    phone: "18600260781", 
+    email: "manl@ivymobi.com", 
+    groupId: "3",
+    department: "人力资源",
+    position: "HR经理",
+    status: "已激活",
+    groups: ["已激活"],
+    receiveNotifications: true
+  },
+  { 
+    id: "10", 
+    name: "田钢", 
+    phone: "15810505520", 
+    email: "tg@ivymobi.com", 
+    groupId: "3",
+    department: "技术部",
+    position: "前端工程师",
+    status: "已激活",
+    groups: ["已激活"],
+    receiveNotifications: true
+  },
+  { 
+    id: "11", 
+    name: "刘承亮", 
+    phone: "18363623719", 
+    email: "383237767@qq.com", 
+    groupId: "3",
+    department: "技术部",
+    position: "后端工程师",
+    status: "已激活",
+    groups: ["已激活"],
+    receiveNotifications: false
+  },
 ];
 
 export default function Members() {
-  const [selectedGroup, setSelectedGroup] = useState<Group | null>(mockGroups[0]);
+  const [selectedGroup, setSelectedGroup] = useState<Group | null>(mockGroups[2]); // Default to "已激活"
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredGroups = mockGroups.filter(group =>
@@ -65,21 +194,30 @@ export default function Members() {
     ? mockMembers.filter(m => m.groupId === selectedGroup.id)
     : [];
 
+  const handleGroupSelect = (group: Group) => {
+    setSelectedGroup(group);
+    setSelectedMember(null); // Clear member selection when changing groups
+  };
+
+  const handleMemberSelect = (member: Member) => {
+    setSelectedMember(member);
+  };
+
   return (
     <AdminLayout>
       <div className="flex h-[calc(100vh-3.5rem)]">
         {/* Left Panel - Group List */}
-        <div className="w-[400px] border-r border-border flex flex-col bg-card">
+        <div className="w-[320px] border-r border-border flex flex-col bg-card shrink-0">
           {/* Header */}
-          <div className="flex items-center gap-3 p-4 border-b border-border">
-            <h1 className="text-lg font-medium text-foreground">成员管理</h1>
-            <Button size="sm">
+          <div className="flex items-center gap-2 p-4 border-b border-border flex-wrap">
+            <h1 className="text-lg font-medium text-foreground mr-auto">成员管理</h1>
+            <Button size="sm" className="text-xs h-8">
               导出成员列表
             </Button>
-            <Button size="sm">
+            <Button size="sm" className="text-xs h-8">
               邀请成员
             </Button>
-            <Button size="sm" variant="outline">
+            <Button size="sm" variant="outline" className="text-xs h-8">
               新建群组
             </Button>
           </div>
@@ -114,7 +252,7 @@ export default function Members() {
                       "cursor-pointer",
                       selectedGroup?.id === group.id && "bg-accent"
                     )}
-                    onClick={() => setSelectedGroup(group)}
+                    onClick={() => handleGroupSelect(group)}
                   >
                     <TableCell className="font-medium">{group.name}</TableCell>
                     <TableCell className="text-right">{group.count}</TableCell>
@@ -125,8 +263,8 @@ export default function Members() {
           </div>
         </div>
 
-        {/* Right Panel - Member List */}
-        <div className="flex-1 flex flex-col bg-background">
+        {/* Middle Panel - Member List */}
+        <div className="flex-1 flex flex-col bg-background min-w-0">
           {/* Header */}
           <div className="p-4 border-b border-border">
             <h2 className="text-lg font-medium text-foreground">
@@ -147,10 +285,19 @@ export default function Members() {
               <TableBody>
                 {groupMembers.length > 0 ? (
                   groupMembers.map((member) => (
-                    <TableRow key={member.id} className="cursor-pointer hover:bg-muted/50">
+                    <TableRow 
+                      key={member.id} 
+                      className={cn(
+                        "cursor-pointer",
+                        selectedMember?.id === member.id 
+                          ? "bg-accent" 
+                          : "hover:bg-muted/50"
+                      )}
+                      onClick={() => handleMemberSelect(member)}
+                    >
                       <TableCell>{member.name}</TableCell>
                       <TableCell>{member.phone}</TableCell>
-                      <TableCell>{member.email}</TableCell>
+                      <TableCell className="truncate max-w-[200px]">{member.email}</TableCell>
                     </TableRow>
                   ))
                 ) : (
@@ -180,6 +327,12 @@ export default function Members() {
             </div>
           </div>
         </div>
+
+        {/* Right Panel - Member Detail */}
+        <MemberDetailPanel 
+          member={selectedMember} 
+          groupName={selectedGroup?.name}
+        />
       </div>
     </AdminLayout>
   );
