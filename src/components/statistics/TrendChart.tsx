@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   AreaChart,
   Area,
@@ -9,6 +9,12 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { zhCN } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
 interface TrendChartProps {
@@ -47,6 +53,13 @@ const colorMap = {
   },
 };
 
+const timeUnits = [
+  { value: "day", label: "日" },
+  { value: "week", label: "周" },
+  { value: "month", label: "月" },
+  { value: "year", label: "年" },
+];
+
 export function TrendChart({
   title,
   data,
@@ -56,6 +69,11 @@ export function TrendChart({
   height = 200,
 }: TrendChartProps) {
   const colors = colorMap[color];
+  const [timeUnit, setTimeUnit] = useState<string>("month");
+  const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
+    from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+    to: new Date(),
+  });
 
   const gradientId = useMemo(() => `gradient-${Math.random().toString(36).slice(2)}`, []);
   const previousGradientId = useMemo(() => `prev-gradient-${Math.random().toString(36).slice(2)}`, []);
@@ -63,7 +81,54 @@ export function TrendChart({
   return (
     <Card className={cn("overflow-hidden", className)}>
       <CardHeader className="pb-2">
-        <CardTitle className="text-base font-medium">{title}</CardTitle>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <CardTitle className="text-base font-medium">{title}</CardTitle>
+          <div className="flex items-center gap-2">
+            {/* Date Range Picker */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="h-7 text-xs gap-1.5 px-2">
+                  <CalendarIcon className="h-3 w-3" />
+                  <span className="hidden sm:inline">
+                    {format(dateRange.from, "MM/dd", { locale: zhCN })} - {format(dateRange.to, "MM/dd", { locale: zhCN })}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <Calendar
+                  mode="range"
+                  selected={{ from: dateRange.from, to: dateRange.to }}
+                  onSelect={(range) => {
+                    if (range?.from && range?.to) {
+                      setDateRange({ from: range.from, to: range.to });
+                    }
+                  }}
+                  locale={zhCN}
+                  numberOfMonths={2}
+                  className="p-3 pointer-events-auto"
+                />
+              </PopoverContent>
+            </Popover>
+
+            {/* Time Unit Selector */}
+            <div className="flex rounded-md border border-border overflow-hidden">
+              {timeUnits.map((unit) => (
+                <button
+                  key={unit.value}
+                  onClick={() => setTimeUnit(unit.value)}
+                  className={cn(
+                    "px-2 py-1 text-xs transition-colors",
+                    timeUnit === unit.value
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-background text-muted-foreground hover:bg-muted"
+                  )}
+                >
+                  {unit.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </CardHeader>
       <CardContent className="pb-4">
         <ResponsiveContainer width="100%" height={height}>
