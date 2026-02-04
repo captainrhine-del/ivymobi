@@ -52,10 +52,10 @@ export function ActivityDetailPanel({ activity }: ActivityDetailPanelProps) {
 
       {/* Action Buttons */}
       <div className="flex gap-3">
-        <Button className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">
+        <Button>
           修改活动
         </Button>
-        <Button className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">
+        <Button>
           删除
         </Button>
       </div>
@@ -78,7 +78,7 @@ export function ActivityDetailPanel({ activity }: ActivityDetailPanelProps) {
                 <rect x="60" y="80" width="15" height="10" fill="currentColor" className="text-foreground" />
               </svg>
             </div>
-            <Button size="sm" className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">
+            <Button size="sm">
               下载小程序码
             </Button>
           </div>
@@ -98,14 +98,14 @@ export function ActivityDetailPanel({ activity }: ActivityDetailPanelProps) {
                 <rect x="65" y="75" width="10" height="10" fill="currentColor" className="text-foreground" />
               </svg>
             </div>
-            <Button size="sm" className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">
+            <Button size="sm">
               下载二维码
             </Button>
           </div>
         </div>
 
         {/* Copy Link Button */}
-        <Button className="w-full bg-destructive hover:bg-destructive/90 text-destructive-foreground">
+        <Button className="w-full">
           复制网页链接
         </Button>
       </div>

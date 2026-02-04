@@ -76,7 +76,7 @@ export default function Activities() {
           <div className="flex items-center justify-between p-4 border-b border-border">
             <div className="flex items-center gap-4">
               <h1 className="text-lg font-medium text-foreground">活动管理</h1>
-              <Button size="sm" className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">
+              <Button size="sm">
                 <Plus className="h-4 w-4 mr-1" />
                 创建活动
               </Button>
