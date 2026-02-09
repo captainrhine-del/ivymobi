@@ -15,6 +15,8 @@ import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import ProductManagement from "./pages/ProductManagement";
+import SmartSamples from "./pages/SmartSamples";
 
 const queryClient = new QueryClient();
 
@@ -27,12 +29,14 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/products" element={<ProductManagement />} />
             <Route path="/information" element={<InformationManagement />} />
             <Route path="/company" element={<CompanyMaterials />} />
             <Route path="/activities" element={<Activities />} />
             <Route path="/members" element={<Members />} />
             <Route path="/statistics" element={<Statistics />} />
             <Route path="/miniprogram" element={<MiniProgram />} />
+            <Route path="/smart-samples" element={<SmartSamples />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/auth" element={<Auth />} />
