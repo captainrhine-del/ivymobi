@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -7,18 +7,27 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { Folder } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Settings() {
+  const { viColor: globalViColor, setViColor: setGlobalViColor } = useTheme();
+  
   const [companyName, setCompanyName] = useState("北京品冠天成科技有限公司");
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const [viColor, setViColor] = useState("#2563eb");
+  const [viColor, setViColor] = useState(globalViColor);
   const [backgroundStyle, setBackgroundStyle] = useState<"light" | "dark">("dark");
   const [folderIcon, setFolderIcon] = useState<"default" | "custom">("default");
   const [customFolderIcon, setCustomFolderIcon] = useState<string | null>(null);
   const [showLatestUpdate, setShowLatestUpdate] = useState(false);
   const [address, setAddress] = useState("北京市丰台区南三环西路丰台文化科技创新大厦科技2号楼");
   const [website, setWebsite] = useState("www.yangbentong.com");
+
+  // Apply VI color in real-time as user picks color
+  const handleViColorChange = (color: string) => {
+    setViColor(color);
+    setGlobalViColor(color);
+  };
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -158,7 +167,7 @@ export default function Settings() {
                 <input
                   type="color"
                   value={viColor}
-                  onChange={(e) => setViColor(e.target.value)}
+                  onChange={(e) => handleViColorChange(e.target.value)}
                   className="w-16 h-8 rounded cursor-pointer border-0"
                 />
               </div>
