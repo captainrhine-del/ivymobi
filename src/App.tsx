@@ -10,6 +10,7 @@ import Activities from "./pages/Activities";
 import Members from "./pages/Members";
 import Statistics from "./pages/Statistics";
 import MiniProgram from "./pages/MiniProgram";
+import Notifications from "./pages/Notifications";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/members" element={<Members />} />
           <Route path="/statistics" element={<Statistics />} />
           <Route path="/miniprogram" element={<MiniProgram />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
