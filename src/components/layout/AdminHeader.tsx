@@ -1,5 +1,6 @@
-import { Bell, Globe, ExternalLink, Search, User } from "lucide-react";
+import { Bell, Globe, ExternalLink, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { UserMenu } from "./UserMenu";
 
 export function AdminHeader() {
   return (
@@ -38,10 +39,8 @@ export function AdminHeader() {
           <ExternalLink className="h-4 w-4" />
         </button>
         
-        {/* User Avatar */}
-        <button className="w-9 h-9 rounded-full border-2 border-border flex items-center justify-center hover:border-primary/50 transition-colors">
-          <User className="h-5 w-5 text-muted-foreground" />
-        </button>
+        {/* User Menu */}
+        <UserMenu />
       </div>
     </header>
   );
