@@ -11,7 +11,7 @@ import {
   Settings,
   ChevronLeft,
   Package,
-  FlaskConical,
+  BookOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -31,7 +31,7 @@ const navItems: NavItem[] = [
   { icon: Users, label: "成员管理", href: "/members" },
   { icon: BarChart3, label: "数据统计", href: "/statistics" },
   { icon: Smartphone, label: "专属小程序", href: "/miniprogram" },
-  { icon: FlaskConical, label: "智能样本", href: "/smart-samples" },
+  { icon: BookOpen, label: "智能样本", href: "/smart-samples" },
   { icon: Bell, label: "通知管理", href: "/notifications" },
   { icon: Settings, label: "设置", href: "/settings" },
 ];
