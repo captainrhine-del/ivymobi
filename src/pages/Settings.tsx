@@ -6,10 +6,32 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { Folder, XCircle } from "lucide-react";
+import { Folder, XCircle, GripVertical } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
-const initialIndustries = [
+interface Industry {
+  id: string;
+  name: string;
+}
+
+const initialIndustries: Industry[] = [
   { id: "1", name: "机加工" },
   { id: "2", name: "低压配电" },
   { id: "3", name: "自动化" },
@@ -20,6 +42,49 @@ const initialIndustries = [
   { id: "8", name: "家居" },
   { id: "9", name: "工程机械" },
 ];
+
+// Sortable Industry Item Component
+function SortableIndustryItem({ industry, onDelete }: { industry: Industry; onDelete: () => void }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: industry.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center justify-between px-4 py-3 bg-muted rounded-lg"
+    >
+      <div className="flex items-center gap-3">
+        <button
+          {...attributes}
+          {...listeners}
+          className="cursor-grab text-muted-foreground hover:text-foreground touch-none"
+        >
+          <GripVertical className="h-4 w-4" />
+        </button>
+        <span className="text-foreground">{industry.name}</span>
+      </div>
+      <button
+        onClick={onDelete}
+        className="text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <XCircle className="h-5 w-5" />
+      </button>
+    </div>
+  );
+}
 
 export default function Settings() {
   const { viColor: globalViColor, setViColor: setGlobalViColor } = useTheme();
@@ -388,23 +453,36 @@ export default function Settings() {
                 )}
               </div>
 
-              {/* Industry List */}
-              <div className="space-y-2">
-                {industries.map((industry) => (
-                  <div
-                    key={industry.id}
-                    className="flex items-center justify-between px-4 py-3 bg-muted rounded-lg"
-                  >
-                    <span className="text-foreground">{industry.name}</span>
-                    <button
-                      onClick={() => setIndustries(industries.filter((i) => i.id !== industry.id))}
-                      className="text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <XCircle className="h-5 w-5" />
-                    </button>
+              {/* Industry List with Drag & Drop */}
+              <DndContext
+                sensors={useSensors(
+                  useSensor(PointerSensor),
+                  useSensor(KeyboardSensor, {
+                    coordinateGetter: sortableKeyboardCoordinates,
+                  })
+                )}
+                collisionDetection={closestCenter}
+                onDragEnd={(event: DragEndEvent) => {
+                  const { active, over } = event;
+                  if (over && active.id !== over.id) {
+                    const oldIndex = industries.findIndex((i) => i.id === active.id);
+                    const newIndex = industries.findIndex((i) => i.id === over.id);
+                    setIndustries(arrayMove(industries, oldIndex, newIndex));
+                  }
+                }}
+              >
+                <SortableContext items={industries.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+                  <div className="space-y-2">
+                    {industries.map((industry) => (
+                      <SortableIndustryItem
+                        key={industry.id}
+                        industry={industry}
+                        onDelete={() => setIndustries(industries.filter((i) => i.id !== industry.id))}
+                      />
+                    ))}
                   </div>
-                ))}
-              </div>
+                </SortableContext>
+              </DndContext>
             </div>
           </TabsContent>
 
