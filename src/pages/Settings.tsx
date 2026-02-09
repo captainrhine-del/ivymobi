@@ -104,6 +104,11 @@ export default function Settings() {
   const [industries, setIndustries] = useState(initialIndustries);
   const [newIndustry, setNewIndustry] = useState("");
   const [showAddIndustry, setShowAddIndustry] = useState(false);
+  
+  // Business type state
+  const [businessTypes, setBusinessTypes] = useState<Industry[]>([]);
+  const [newBusinessType, setNewBusinessType] = useState("");
+  const [showAddBusinessType, setShowAddBusinessType] = useState(false);
 
   // Apply VI color in real-time as user picks color
   const handleViColorChange = (color: string) => {
@@ -487,8 +492,76 @@ export default function Settings() {
           </TabsContent>
 
           <TabsContent value="business" className="flex-1 overflow-auto mt-0">
-            <div className="p-6">
-              <p className="text-muted-foreground">业务类型设置内容</p>
+            <div className="p-6 max-w-2xl space-y-6">
+              {/* Description */}
+              <p className="text-muted-foreground">
+                设置业务类型，可以让客户快速输入自己所属业务类型，以收集客户信息
+              </p>
+
+              {/* Add Business Type Button */}
+              <div>
+                {showAddBusinessType ? (
+                  <div className="flex items-center gap-2 max-w-md">
+                    <Input
+                      value={newBusinessType}
+                      onChange={(e) => setNewBusinessType(e.target.value)}
+                      placeholder="输入业务类型名称"
+                      className="flex-1"
+                    />
+                    <Button
+                      onClick={() => {
+                        if (newBusinessType.trim()) {
+                          setBusinessTypes([...businessTypes, { id: Date.now().toString(), name: newBusinessType.trim() }]);
+                          setNewBusinessType("");
+                          setShowAddBusinessType(false);
+                        }
+                      }}
+                    >
+                      确定
+                    </Button>
+                    <Button variant="outline" onClick={() => setShowAddBusinessType(false)}>
+                      取消
+                    </Button>
+                  </div>
+                ) : (
+                  <Button variant="outline" onClick={() => setShowAddBusinessType(true)}>
+                    添加
+                  </Button>
+                )}
+              </div>
+
+              {/* Business Type List with Drag & Drop */}
+              {businessTypes.length > 0 && (
+                <DndContext
+                  sensors={useSensors(
+                    useSensor(PointerSensor),
+                    useSensor(KeyboardSensor, {
+                      coordinateGetter: sortableKeyboardCoordinates,
+                    })
+                  )}
+                  collisionDetection={closestCenter}
+                  onDragEnd={(event: DragEndEvent) => {
+                    const { active, over } = event;
+                    if (over && active.id !== over.id) {
+                      const oldIndex = businessTypes.findIndex((i) => i.id === active.id);
+                      const newIndex = businessTypes.findIndex((i) => i.id === over.id);
+                      setBusinessTypes(arrayMove(businessTypes, oldIndex, newIndex));
+                    }
+                  }}
+                >
+                  <SortableContext items={businessTypes.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+                    <div className="space-y-2">
+                      {businessTypes.map((businessType) => (
+                        <SortableIndustryItem
+                          key={businessType.id}
+                          industry={businessType}
+                          onDelete={() => setBusinessTypes(businessTypes.filter((i) => i.id !== businessType.id))}
+                        />
+                      ))}
+                    </div>
+                  </SortableContext>
+                </DndContext>
+              )}
             </div>
           </TabsContent>
 
