@@ -9,7 +9,7 @@ import { Smartphone, Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ParticleBackground } from "@/components/ui/particle-background";
-import logo from "@/assets/logo.png";
+import loginLogo from "@/assets/login-logo.png";
 
 type AuthMode = "login" | "forgot-password";
 
@@ -169,7 +169,7 @@ export default function Auth() {
         {/* Logo/Brand Area */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center mb-5">
-            <img src={logo} alt="AI产品信息管理平台" className="h-12 object-contain" />
+            <img src={loginLogo} alt="样本通" className="h-14 object-contain" />
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">AI产品信息管理平台</h1>
           <p className="text-blue-200/60 mt-2 text-sm">企业级智能产品数据管理解决方案</p>
