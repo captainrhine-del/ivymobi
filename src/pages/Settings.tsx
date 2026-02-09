@@ -141,6 +141,18 @@ export default function Settings() {
   const [editingTag, setEditingTag] = useState<{ categoryId: string; optionId?: string; name: string } | null>(null);
   const [addingOptionTo, setAddingOptionTo] = useState<string | null>(null);
   const [newOptionName, setNewOptionName] = useState("");
+  
+  // Multi-language state
+  interface LanguageOption {
+    id: string;
+    name: string;
+    enabled: boolean;
+  }
+  const [languages, setLanguages] = useState<LanguageOption[]>([
+    { id: "zh", name: "中文", enabled: true },
+    { id: "en", name: "English", enabled: false },
+    { id: "ru", name: "русский", enabled: false },
+  ]);
 
   // Apply VI color in real-time as user picks color
   const handleViColorChange = (color: string) => {
@@ -833,8 +845,44 @@ export default function Settings() {
           </TabsContent>
 
           <TabsContent value="languages" className="flex-1 overflow-auto mt-0">
-            <div className="p-6">
-              <p className="text-muted-foreground">多语言设置内容</p>
+            <div className="p-6 max-w-2xl space-y-6">
+              {/* Description */}
+              <div className="space-y-1 text-muted-foreground">
+                <p>系统内置中文/英文，通过添加新语言。启用新语言后：</p>
+                <p>1.团队成员访问的ecatalog将自动生效</p>
+                <p>2.访客和潜客访问的智能样本需要在"管理后台&gt;智能样本"里为语言配置内容并保存后方可生效</p>
+              </div>
+
+              {/* Language List */}
+              <div className="border border-border rounded-lg overflow-hidden">
+                {languages.map((language, index) => (
+                  <div 
+                    key={language.id}
+                    className={cn(
+                      "flex items-center justify-between px-4 py-4",
+                      index !== languages.length - 1 && "border-b border-border"
+                    )}
+                  >
+                    <span className="text-foreground font-medium">{language.name}</span>
+                    <div className="flex items-center gap-3">
+                      <Switch
+                        checked={language.enabled}
+                        onCheckedChange={(checked) => {
+                          setLanguages(languages.map(l => 
+                            l.id === language.id ? { ...l, enabled: checked } : l
+                          ));
+                        }}
+                      />
+                      <span className={cn(
+                        "text-sm",
+                        language.enabled ? "text-primary" : "text-muted-foreground"
+                      )}>
+                        {language.enabled ? "已启用" : "已禁用"}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </TabsContent>
         </Tabs>
