@@ -57,12 +57,12 @@ export function AdminSidebar() {
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200",
                 isActive
-                  ? "bg-accent text-accent-foreground font-medium"
+                  ? "bg-accent text-primary font-medium"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
               <item.icon className={cn("h-5 w-5 shrink-0", isActive && "text-primary")} />
-              {!collapsed && <span>{item.label}</span>}
+              {!collapsed && <span className={isActive ? "text-primary" : ""}>{item.label}</span>}
             </Link>
           );
         })}
