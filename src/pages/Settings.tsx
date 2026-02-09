@@ -6,8 +6,20 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { Folder } from "lucide-react";
+import { Folder, XCircle } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+
+const initialIndustries = [
+  { id: "1", name: "机加工" },
+  { id: "2", name: "低压配电" },
+  { id: "3", name: "自动化" },
+  { id: "4", name: "暖通空调" },
+  { id: "5", name: "流体控制" },
+  { id: "6", name: "仪器仪表" },
+  { id: "7", name: "医疗器械" },
+  { id: "8", name: "家居" },
+  { id: "9", name: "工程机械" },
+];
 
 export default function Settings() {
   const { viColor: globalViColor, setViColor: setGlobalViColor } = useTheme();
@@ -22,6 +34,11 @@ export default function Settings() {
   const [showLatestUpdate, setShowLatestUpdate] = useState(false);
   const [address, setAddress] = useState("北京市丰台区南三环西路丰台文化科技创新大厦科技2号楼");
   const [website, setWebsite] = useState("www.yangbentong.com");
+  
+  // Industry state
+  const [industries, setIndustries] = useState(initialIndustries);
+  const [newIndustry, setNewIndustry] = useState("");
+  const [showAddIndustry, setShowAddIndustry] = useState(false);
 
   // Apply VI color in real-time as user picks color
   const handleViColorChange = (color: string) => {
@@ -333,8 +350,61 @@ export default function Settings() {
           </TabsContent>
 
           <TabsContent value="industry" className="flex-1 overflow-auto mt-0">
-            <div className="p-6">
-              <p className="text-muted-foreground">行业设置内容</p>
+            <div className="p-6 max-w-2xl space-y-6">
+              {/* Description */}
+              <p className="text-muted-foreground">
+                设置客户行业，可以让客户快速输入自己所在行业，以收集客户信息
+              </p>
+
+              {/* Add Industry Button */}
+              <div>
+                {showAddIndustry ? (
+                  <div className="flex items-center gap-2 max-w-md">
+                    <Input
+                      value={newIndustry}
+                      onChange={(e) => setNewIndustry(e.target.value)}
+                      placeholder="输入行业名称"
+                      className="flex-1"
+                    />
+                    <Button
+                      onClick={() => {
+                        if (newIndustry.trim()) {
+                          setIndustries([...industries, { id: Date.now().toString(), name: newIndustry.trim() }]);
+                          setNewIndustry("");
+                          setShowAddIndustry(false);
+                        }
+                      }}
+                    >
+                      确定
+                    </Button>
+                    <Button variant="outline" onClick={() => setShowAddIndustry(false)}>
+                      取消
+                    </Button>
+                  </div>
+                ) : (
+                  <Button variant="outline" onClick={() => setShowAddIndustry(true)}>
+                    添加行业
+                  </Button>
+                )}
+              </div>
+
+              {/* Industry List */}
+              <div className="space-y-2">
+                {industries.map((industry) => (
+                  <div
+                    key={industry.id}
+                    className="flex items-center justify-between px-4 py-3 bg-muted rounded-lg"
+                  >
+                    <span className="text-foreground">{industry.name}</span>
+                    <button
+                      onClick={() => setIndustries(industries.filter((i) => i.id !== industry.id))}
+                      className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <XCircle className="h-5 w-5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </TabsContent>
 
