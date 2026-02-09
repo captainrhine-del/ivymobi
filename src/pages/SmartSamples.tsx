@@ -1,6 +1,6 @@
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Card } from "@/components/ui/card";
-import { FlaskConical } from "lucide-react";
+import { BookOpen } from "lucide-react";
 
 export default function SmartSamples() {
   return (
@@ -12,7 +12,7 @@ export default function SmartSamples() {
 
         <Card className="p-12 flex flex-col items-center justify-center text-center">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <FlaskConical className="h-8 w-8 text-primary" />
+            <BookOpen className="h-8 w-8 text-primary" />
           </div>
           <h2 className="text-lg font-medium mb-2">智能样本管理</h2>
           <p className="text-muted-foreground max-w-md">
