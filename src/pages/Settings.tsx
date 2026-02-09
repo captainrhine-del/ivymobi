@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { Folder, XCircle, GripVertical } from "lucide-react";
+import { Folder, XCircle, GripVertical, Pencil, Trash2, ChevronUp } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
   DndContext,
@@ -113,6 +113,34 @@ export default function Settings() {
   // User agreement state
   const [agreementFile, setAgreementFile] = useState<File | null>(null);
   const [agreementPreview, setAgreementPreview] = useState<string | null>(null);
+  
+  // Tag management state
+  interface TagOption {
+    id: string;
+    name: string;
+  }
+  interface TagCategory {
+    id: string;
+    name: string;
+    options: TagOption[];
+    isExpanded: boolean;
+  }
+  const [tagCategories, setTagCategories] = useState<TagCategory[]>([
+    {
+      id: "1",
+      name: "变频器",
+      options: [
+        { id: "1-1", name: "inverter2" },
+        { id: "1-2", name: "inverter1" },
+      ],
+      isExpanded: true,
+    },
+  ]);
+  const [showAddTag, setShowAddTag] = useState(false);
+  const [newTagName, setNewTagName] = useState("");
+  const [editingTag, setEditingTag] = useState<{ categoryId: string; optionId?: string; name: string } | null>(null);
+  const [addingOptionTo, setAddingOptionTo] = useState<string | null>(null);
+  const [newOptionName, setNewOptionName] = useState("");
 
   // Apply VI color in real-time as user picks color
   const handleViColorChange = (color: string) => {
@@ -632,8 +660,175 @@ export default function Settings() {
           </TabsContent>
 
           <TabsContent value="tags" className="flex-1 overflow-auto mt-0">
-            <div className="p-6">
-              <p className="text-muted-foreground">标签管理设置内容</p>
+            <div className="p-6 max-w-3xl space-y-4">
+              {/* Add Tag Button */}
+              <div>
+                {showAddTag ? (
+                  <div className="flex items-center gap-2 max-w-md">
+                    <Input
+                      value={newTagName}
+                      onChange={(e) => setNewTagName(e.target.value)}
+                      placeholder="输入标签名称"
+                      className="flex-1"
+                    />
+                    <Button
+                      onClick={() => {
+                        if (newTagName.trim()) {
+                          setTagCategories([...tagCategories, {
+                            id: Date.now().toString(),
+                            name: newTagName.trim(),
+                            options: [],
+                            isExpanded: true,
+                          }]);
+                          setNewTagName("");
+                          setShowAddTag(false);
+                        }
+                      }}
+                    >
+                      确定
+                    </Button>
+                    <Button variant="outline" onClick={() => { setShowAddTag(false); setNewTagName(""); }}>
+                      取消
+                    </Button>
+                  </div>
+                ) : (
+                  <Button variant="outline" onClick={() => setShowAddTag(true)}>
+                    <span className="text-primary">+</span> 添加标签
+                  </Button>
+                )}
+              </div>
+
+              {/* Tag Categories */}
+              <div className="space-y-2">
+                {tagCategories.map((category) => (
+                  <div key={category.id} className="border border-border rounded-lg overflow-hidden">
+                    {/* Category Header */}
+                    <div className="flex items-center justify-between px-4 py-3 bg-muted">
+                      <div className="flex items-center gap-3">
+                        <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
+                        {editingTag?.categoryId === category.id && !editingTag.optionId ? (
+                          <div className="flex items-center gap-2">
+                            <Input
+                              value={editingTag.name}
+                              onChange={(e) => setEditingTag({ ...editingTag, name: e.target.value })}
+                              className="h-8 w-40"
+                            />
+                            <Button size="sm" onClick={() => {
+                              setTagCategories(tagCategories.map(c => 
+                                c.id === category.id ? { ...c, name: editingTag.name } : c
+                              ));
+                              setEditingTag(null);
+                            }}>保存</Button>
+                            <Button size="sm" variant="outline" onClick={() => setEditingTag(null)}>取消</Button>
+                          </div>
+                        ) : (
+                          <span className="font-medium text-foreground">{category.name}</span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setAddingOptionTo(addingOptionTo === category.id ? null : category.id)}
+                          className="flex items-center gap-1 text-sm text-primary hover:underline"
+                        >
+                          <span>+</span> 添加选项
+                        </button>
+                        <button
+                          onClick={() => setEditingTag({ categoryId: category.id, name: category.name })}
+                          className="flex items-center gap-1 text-sm text-primary hover:underline"
+                        >
+                          <Pencil className="h-3 w-3" /> 修改
+                        </button>
+                        <button
+                          onClick={() => setTagCategories(tagCategories.filter(c => c.id !== category.id))}
+                          className="flex items-center gap-1 text-sm text-destructive hover:underline"
+                        >
+                          <Trash2 className="h-3 w-3" /> 删除
+                        </button>
+                        <button
+                          onClick={() => setTagCategories(tagCategories.map(c => 
+                            c.id === category.id ? { ...c, isExpanded: !c.isExpanded } : c
+                          ))}
+                          className="text-muted-foreground hover:text-foreground"
+                        >
+                          <ChevronUp className={cn("h-4 w-4 transition-transform", !category.isExpanded && "rotate-180")} />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Add Option Form */}
+                    {addingOptionTo === category.id && (
+                      <div className="flex items-center gap-2 px-4 py-2 bg-background border-b border-border">
+                        <Input
+                          value={newOptionName}
+                          onChange={(e) => setNewOptionName(e.target.value)}
+                          placeholder="输入选项名称"
+                          className="flex-1 h-8"
+                        />
+                        <Button size="sm" onClick={() => {
+                          if (newOptionName.trim()) {
+                            setTagCategories(tagCategories.map(c => 
+                              c.id === category.id 
+                                ? { ...c, options: [...c.options, { id: Date.now().toString(), name: newOptionName.trim() }] }
+                                : c
+                            ));
+                            setNewOptionName("");
+                            setAddingOptionTo(null);
+                          }
+                        }}>确定</Button>
+                        <Button size="sm" variant="outline" onClick={() => { setAddingOptionTo(null); setNewOptionName(""); }}>取消</Button>
+                      </div>
+                    )}
+
+                    {/* Category Options */}
+                    {category.isExpanded && category.options.length > 0 && (
+                      <div className="divide-y divide-border">
+                        {category.options.map((option) => (
+                          <div key={option.id} className="flex items-center justify-between px-4 py-3 pl-12 bg-background">
+                            {editingTag?.categoryId === category.id && editingTag.optionId === option.id ? (
+                              <div className="flex items-center gap-2">
+                                <Input
+                                  value={editingTag.name}
+                                  onChange={(e) => setEditingTag({ ...editingTag, name: e.target.value })}
+                                  className="h-8 w-40"
+                                />
+                                <Button size="sm" onClick={() => {
+                                  setTagCategories(tagCategories.map(c => 
+                                    c.id === category.id 
+                                      ? { ...c, options: c.options.map(o => o.id === option.id ? { ...o, name: editingTag.name } : o) }
+                                      : c
+                                  ));
+                                  setEditingTag(null);
+                                }}>保存</Button>
+                                <Button size="sm" variant="outline" onClick={() => setEditingTag(null)}>取消</Button>
+                              </div>
+                            ) : (
+                              <span className="text-foreground">{option.name}</span>
+                            )}
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => setEditingTag({ categoryId: category.id, optionId: option.id, name: option.name })}
+                                className="flex items-center gap-1 text-sm text-primary hover:underline"
+                              >
+                                <Pencil className="h-3 w-3" /> 修改
+                              </button>
+                              <button
+                                onClick={() => setTagCategories(tagCategories.map(c => 
+                                  c.id === category.id 
+                                    ? { ...c, options: c.options.filter(o => o.id !== option.id) }
+                                    : c
+                                ))}
+                                className="flex items-center gap-1 text-sm text-destructive hover:underline"
+                              >
+                                <Trash2 className="h-3 w-3" /> 删除
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </TabsContent>
 
