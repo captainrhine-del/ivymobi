@@ -5,9 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
-import { Smartphone, Mail, Lock, ArrowLeft, Eye, EyeOff, Cpu, Network, CircuitBoard } from "lucide-react";
+import { Smartphone, Mail, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { ParticleBackground } from "@/components/ui/particle-background";
 import logo from "@/assets/logo.png";
 
 type AuthMode = "login" | "forgot-password";
@@ -144,60 +145,24 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center">
-      {/* Bold Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900" />
+      {/* Dark Base Background */}
+      <div className="absolute inset-0 bg-slate-950" />
       
-      {/* Mesh Gradient Overlays */}
+      {/* Red-Blue Gradient Overlays */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-[70%] h-[60%] bg-gradient-to-bl from-cyan-500/20 via-blue-600/10 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[60%] h-[50%] bg-gradient-to-tr from-indigo-600/20 via-purple-600/10 to-transparent rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-gradient-radial from-blue-500/5 to-transparent rounded-full" />
+        <div className="absolute top-0 left-0 w-[60%] h-[50%] bg-gradient-to-br from-red-600/30 via-red-500/15 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-gradient-to-bl from-blue-600/30 via-blue-500/15 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-[70%] h-[50%] bg-gradient-to-t from-purple-600/20 via-indigo-500/10 to-transparent rounded-full blur-3xl" />
       </div>
       
-      {/* Grid Pattern Overlay */}
-      <div className="absolute inset-0 opacity-[0.15]" 
-        style={{ 
-          backgroundImage: `linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.3) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px'
-        }} 
+      {/* Interactive Particle Background */}
+      <ParticleBackground 
+        particleCount={100}
+        minRadius={1}
+        maxRadius={3}
+        speed={0.4}
+        lineDistance={140}
       />
-      
-      {/* Floating Tech Elements */}
-      <div className="absolute top-16 left-16 text-cyan-400/20 animate-pulse">
-        <CircuitBoard className="w-40 h-40" />
-      </div>
-      <div className="absolute top-32 right-24 text-blue-400/15">
-        <Network className="w-32 h-32" />
-      </div>
-      <div className="absolute bottom-24 left-32 text-indigo-400/15">
-        <Cpu className="w-28 h-28" />
-      </div>
-      <div className="absolute bottom-16 right-16 text-cyan-400/20 animate-pulse" style={{ animationDelay: '1s' }}>
-        <CircuitBoard className="w-36 h-36 rotate-45" />
-      </div>
-      
-      {/* Animated Horizontal Lines */}
-      <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="lineGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#06b6d4" stopOpacity="0" />
-            <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
-          </linearGradient>
-          <linearGradient id="lineGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#6366f1" stopOpacity="0" />
-            <stop offset="50%" stopColor="#6366f1" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <line x1="0" y1="25%" x2="100%" y2="25%" stroke="url(#lineGradient1)" strokeWidth="1" className="animate-pulse" />
-        <line x1="0" y1="75%" x2="100%" y2="75%" stroke="url(#lineGradient2)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '1.5s' }} />
-      </svg>
-      
-      {/* Glowing Orbs */}
-      <div className="absolute top-1/4 right-1/4 w-2 h-2 bg-cyan-400 rounded-full animate-ping" />
-      <div className="absolute bottom-1/3 left-1/3 w-2 h-2 bg-blue-400 rounded-full animate-ping" style={{ animationDelay: '0.5s' }} />
-      <div className="absolute top-2/3 right-1/3 w-1.5 h-1.5 bg-indigo-400 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
 
       {/* Main Content */}
       <div className="relative z-10 w-full max-w-md px-6">
