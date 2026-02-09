@@ -43,12 +43,6 @@ export function AdminSidebar() {
         collapsed ? "w-16" : "w-56"
       )}
     >
-      {/* Logo */}
-      <div className="h-14 flex items-center px-4 border-b border-border">
-        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-          <FileText className="h-4 w-4 text-primary-foreground" />
-        </div>
-      </div>
 
       {/* Navigation */}
       <nav className="flex-1 py-4 px-3 space-y-1">
