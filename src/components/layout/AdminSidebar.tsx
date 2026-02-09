@@ -10,6 +10,8 @@ import {
   Bell,
   Settings,
   ChevronLeft,
+  Package,
+  FlaskConical,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -22,12 +24,14 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { icon: Home, label: "首页", href: "/" },
+  { icon: Package, label: "产品管理", href: "/products" },
   { icon: FileText, label: "资讯管理", href: "/information" },
   { icon: Briefcase, label: "公司资料", href: "/company" },
   { icon: Sparkles, label: "活动", href: "/activities" },
   { icon: Users, label: "成员管理", href: "/members" },
   { icon: BarChart3, label: "数据统计", href: "/statistics" },
   { icon: Smartphone, label: "专属小程序", href: "/miniprogram" },
+  { icon: FlaskConical, label: "智能样本", href: "/smart-samples" },
   { icon: Bell, label: "通知管理", href: "/notifications" },
   { icon: Settings, label: "设置", href: "/settings" },
 ];
