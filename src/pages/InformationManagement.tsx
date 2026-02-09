@@ -42,7 +42,7 @@ export default function InformationManagement() {
             className={cn(
               "w-full py-4 px-6 text-left text-sm font-medium transition-colors border-l-2",
               activeTab === "articles"
-                ? "bg-accent text-accent-foreground border-primary"
+                ? "bg-accent text-primary border-primary"
                 : "text-muted-foreground hover:text-foreground border-transparent hover:bg-muted"
             )}
           >
@@ -53,7 +53,7 @@ export default function InformationManagement() {
             className={cn(
               "w-full py-4 px-6 text-left text-sm font-medium transition-colors border-l-2",
               activeTab === "qa"
-                ? "bg-accent text-accent-foreground border-primary"
+                ? "bg-accent text-primary border-primary"
                 : "text-muted-foreground hover:text-foreground border-transparent hover:bg-muted"
             )}
           >
