@@ -109,6 +109,10 @@ export default function Settings() {
   const [businessTypes, setBusinessTypes] = useState<Industry[]>([]);
   const [newBusinessType, setNewBusinessType] = useState("");
   const [showAddBusinessType, setShowAddBusinessType] = useState(false);
+  
+  // User agreement state
+  const [agreementFile, setAgreementFile] = useState<File | null>(null);
+  const [agreementPreview, setAgreementPreview] = useState<string | null>(null);
 
   // Apply VI color in real-time as user picks color
   const handleViColorChange = (color: string) => {
@@ -566,8 +570,64 @@ export default function Settings() {
           </TabsContent>
 
           <TabsContent value="agreement" className="flex-1 overflow-auto mt-0">
-            <div className="p-6">
-              <p className="text-muted-foreground">用户协议设置内容</p>
+            <div className="p-6 max-w-2xl space-y-6">
+              {/* Description */}
+              <p className="text-muted-foreground">
+                客户提交个人信息时的必要法律程序
+              </p>
+
+              {/* Agreement Upload */}
+              <div className="space-y-3">
+                <div className="flex items-end gap-4">
+                  <div className="w-36 h-28 bg-muted rounded-lg flex items-center justify-center overflow-hidden">
+                    {agreementPreview ? (
+                      <img src={agreementPreview} alt="Agreement" className="w-full h-full object-contain" />
+                    ) : (
+                      <span className="text-sm text-muted-foreground"></span>
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setAgreementFile(file);
+                            const reader = new FileReader();
+                            reader.onload = (ev) => setAgreementPreview(ev.target?.result as string);
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                      <div className="px-6 py-1.5 bg-muted text-muted-foreground text-sm rounded hover:bg-muted/80 transition-colors text-center">
+                        上传
+                      </div>
+                    </label>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        setAgreementFile(null);
+                        setAgreementPreview(null);
+                      }}
+                    >
+                      恢复默认
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Save Button */}
+              <Button 
+                variant="outline"
+                className="w-full max-w-lg"
+                onClick={() => console.log("Saving agreement...", agreementFile)}
+              >
+                保存
+              </Button>
             </div>
           </TabsContent>
 
