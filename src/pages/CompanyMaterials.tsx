@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { FileDetailPanel } from "@/components/company/FileDetailPanel";
 import { EmptyDetailPanel } from "@/components/company/EmptyDetailPanel";
+import { UploadFileModal } from "@/components/company/UploadFileModal";
 import {
   DndContext,
   closestCenter,
@@ -184,6 +185,7 @@ export default function CompanyMaterials() {
   const [files, setFiles] = useState<FileItem[]>(initialFiles);
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -255,7 +257,7 @@ export default function CompanyMaterials() {
                   </>
                 ) : (
                   <>
-                    <Button size="sm" className="gap-1.5">
+                    <Button size="sm" className="gap-1.5" onClick={() => setUploadModalOpen(true)}>
                       <Upload className="h-4 w-4" />
                       上传文件
                     </Button>
@@ -336,6 +338,13 @@ export default function CompanyMaterials() {
             <EmptyDetailPanel fileCount={files.length} />
           )}
         </div>
+
+        {/* Upload Modal */}
+        <UploadFileModal 
+          open={uploadModalOpen} 
+          onOpenChange={setUploadModalOpen}
+          currentPath="公司资料"
+        />
       </div>
     </AdminLayout>
   );
