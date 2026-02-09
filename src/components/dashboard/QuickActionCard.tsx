@@ -19,7 +19,7 @@ export function QuickActionCard({ icon: Icon, label, onClick, className }: Quick
         className
       )}
     >
-      <div className="w-14 h-14 rounded-full bg-admin-icon-bg flex items-center justify-center group-hover:scale-105 transition-transform">
+      <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-105 transition-transform">
         <Icon className="h-6 w-6 text-primary" />
       </div>
       <span className="text-sm text-foreground">{label}</span>

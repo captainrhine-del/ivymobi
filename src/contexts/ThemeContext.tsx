@@ -56,6 +56,20 @@ function updateCSSVariables(hex: string) {
   
   // Update ring color to match primary
   root.style.setProperty('--ring', `${hsl.h} ${hsl.s}% ${hsl.l}%`);
+  
+  // Update accent color (lighter version of primary)
+  root.style.setProperty('--accent', `${hsl.h} ${hsl.s}% 97%`);
+  root.style.setProperty('--accent-foreground', `${hsl.h} ${hsl.s}% ${hsl.l}%`);
+  
+  // Update sidebar colors
+  root.style.setProperty('--sidebar-primary', `${hsl.h} ${hsl.s}% ${hsl.l}%`);
+  root.style.setProperty('--sidebar-accent', `${hsl.h} ${hsl.s}% 97%`);
+  root.style.setProperty('--sidebar-accent-foreground', `${hsl.h} ${hsl.s}% ${hsl.l}%`);
+  root.style.setProperty('--sidebar-ring', `${hsl.h} ${hsl.s}% ${hsl.l}%`);
+  
+  // Update admin icon background (10% opacity effect using very light version)
+  root.style.setProperty('--admin-icon-bg', `${hsl.h} ${hsl.s}% 95%`);
+  root.style.setProperty('--admin-icon-color', `${hsl.h} ${hsl.s}% ${hsl.l}%`);
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
