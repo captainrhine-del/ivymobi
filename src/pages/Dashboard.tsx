@@ -12,14 +12,16 @@ import {
   TrendingUp,
   Sparkles,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const quickActions = [
-  { icon: Upload, label: "上传公司资料", gradient: "from-blue-500 to-cyan-400" },
-  { icon: UserPlus, label: "邀请成员", gradient: "from-violet-500 to-purple-400" },
-  { icon: CalendarPlus, label: "创建活动", gradient: "from-orange-500 to-amber-400" },
-  { icon: Users, label: "查看潜在客户", gradient: "from-emerald-500 to-teal-400" },
-  { icon: ArrowUpCircle, label: "版本升级/扩容", gradient: "from-rose-500 to-pink-400" },
-  { icon: Link2, label: "专属小程序", gradient: "from-indigo-500 to-blue-400" },
+  { icon: Upload, label: "上传公司资料", gradient: "from-blue-500 to-cyan-400", href: "/company" },
+  { icon: UserPlus, label: "邀请成员", gradient: "from-violet-500 to-purple-400", href: "/members" },
+  { icon: CalendarPlus, label: "创建活动", gradient: "from-orange-500 to-amber-400", href: "/activities" },
+  { icon: Users, label: "查看潜在客户", gradient: "from-emerald-500 to-teal-400", href: "/statistics" },
+  { icon: Link2, label: "专属小程序", gradient: "from-indigo-500 to-blue-400", href: "/miniprogram" },
+  { icon: ArrowUpCircle, label: "版本升级/扩容", gradient: "from-rose-500 to-pink-400", action: "upgrade" },
 ];
 
 const stats = [
@@ -32,6 +34,16 @@ const stats = [
 ];
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
+  const handleQuickAction = (action: typeof quickActions[number]) => {
+    if (action.action === "upgrade") {
+      toast.info("升级版本请拨打: 400 926 4236");
+    } else if (action.href) {
+      navigate(action.href);
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="p-6 space-y-8">
@@ -59,6 +71,7 @@ export default function Dashboard() {
                 icon={action.icon}
                 label={action.label}
                 gradient={action.gradient}
+                onClick={() => handleQuickAction(action)}
               />
             ))}
           </div>
