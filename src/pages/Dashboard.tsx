@@ -2,6 +2,7 @@ import { AdminLayout } from "@/components/layout/AdminLayout";
 import { QuickActionCard } from "@/components/dashboard/QuickActionCard";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { AccountInfoCard } from "@/components/dashboard/AccountInfoCard";
+import { RecentFilesCard } from "@/components/dashboard/RecentFilesCard";
 import {
   Upload,
   UserPlus,
@@ -108,28 +109,8 @@ export default function Dashboard() {
             bandwidth="763.52 GB"
           />
 
-          {/* Activity Feed */}
-          <div className="bg-card rounded-2xl border border-border p-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/5 to-transparent rounded-bl-full" />
-            <h3 className="text-lg font-semibold text-foreground mb-4">最近动态</h3>
-            <div className="space-y-4">
-              {[
-                { text: "新增潜在客户 3 位", time: "10 分钟前", dot: "bg-emerald-500" },
-                { text: "产品资料被浏览 12 次", time: "30 分钟前", dot: "bg-blue-500" },
-                { text: "团队成员上传了新文件", time: "1 小时前", dot: "bg-violet-500" },
-                { text: "活动「春季发布会」已发布", time: "2 小时前", dot: "bg-orange-500" },
-                { text: "系统已自动备份数据", time: "3 小时前", dot: "bg-slate-400" },
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className={`w-2 h-2 rounded-full mt-2 ${item.dot}`} />
-                  <div className="flex-1">
-                    <p className="text-sm text-foreground">{item.text}</p>
-                    <p className="text-xs text-muted-foreground">{item.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Recent Files */}
+          <RecentFilesCard />
         </div>
       </div>
     </AdminLayout>
